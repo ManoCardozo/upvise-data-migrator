@@ -191,8 +191,8 @@ namespace UpviseDataMigrator
                 linkedid = contactId
             };
 
-            Console.WriteLine($"Uploading - Attachment with Document ID {fileId}");
             Thread.Sleep(TimeSpan.FromSeconds(0.5));
+            Console.WriteLine($"Uploading - Attachment with Document ID {fileId}");
             query.uploadFile(file, contactAttachment.DocumentImage);
             Console.WriteLine($"Uploaded - Document ID {fileId}");
         }
