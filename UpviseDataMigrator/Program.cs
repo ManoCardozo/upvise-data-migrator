@@ -11,6 +11,7 @@ namespace UpviseDataMigrator
 {
     class Program
     {
+        private static int _totalFileCount = 0;
         private static int _totalFilesUploaded = 0;
 
         static void Main(string[] args)
@@ -24,15 +25,15 @@ namespace UpviseDataMigrator
                 if (validRange)
                 {
                     var documents = GetDocuments(fromContactId, toContactId);
-                    var attachmentCount = documents.Count;
+                    _totalFileCount = documents.Count;
                     var contactCount = documents.GroupBy(x => x.UpviseContactID).Count();
                     Console.WriteLine();
 
-                    if (attachmentCount > 0)
+                    if (_totalFileCount > 0)
                     {
                         Console.WriteLine("Query results");
                         Console.WriteLine($"Total Contacts: {contactCount}");
-                        Console.WriteLine($"Total Attachments: {attachmentCount}");
+                        Console.WriteLine($"Total Attachments: {_totalFileCount}");
                         Console.WriteLine($"Continue upload to Upvise? y/n");
                         var shouldUpload = Console.ReadLine() == "y";
 
@@ -50,6 +51,13 @@ namespace UpviseDataMigrator
             }
 
             NotifyEndOfProgram();
+        }
+
+        private static void ShowSuccessMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ResetColor();
         }
 
         private static void ShowErrorMessage(string message)
@@ -132,8 +140,9 @@ namespace UpviseDataMigrator
                                     TurnAttachmentToContactPhoto(query, contactId, fileId);
                                 }
 
-                                _totalFilesUploaded++;
                                 MarkAsUploaded(fileId);
+                                _totalFilesUploaded++;
+                                ShowSuccessMessage($"Progress: {_totalFilesUploaded} out of {_totalFileCount} done");
                             }
                             else
                             {
