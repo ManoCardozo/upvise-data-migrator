@@ -16,6 +16,8 @@ namespace UpviseDataMigrator
 
         static void Main(string[] args)
         {
+            ConsoleQuickEdit.Disable();
+
             var option = ReadMenuOption();
 
             if (option == "1")
